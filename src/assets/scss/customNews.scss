@@ -1,0 +1,74 @@
+.card-sports {
+    .h3,
+    h3 {
+        font-size: 1.0625rem !important;
+    }
+    .h5,
+    h5 {
+        font-size: 1.125rem;
+    }
+    .h4,
+    h4 {
+        font-size: .9375rem;
+    }
+    .avatar-xs {
+        font-size: .75rem;
+        width: 24px;
+        height: 24px;
+    }
+    .card-img {
+        height: 210px;
+        max-height: 210px;
+    }
+}
+
+.loader-container {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border: 2px solid #3a3d3b;
+    border-radius: 50%;
+    float: left;
+    margin: 0 5px;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    -webkit-animation: fx 1000ms ease infinite 0ms;
+    animation: fx 1000ms ease infinite 0ms;
+    &:nth-child(2) {
+        -webkit-animation: fx 1000ms ease infinite 300ms;
+        animation: fx 1000ms ease infinite 300ms;
+    }
+    &:nth-child(3) {
+        -webkit-animation: fx 1000ms ease infinite 600ms;
+        animation: fx 1000ms ease infinite 600ms;
+    }
+}
+
+@-webkit-keyframes fx {
+    50% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fx {
+    50% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

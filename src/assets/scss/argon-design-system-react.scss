@@ -16,19 +16,18 @@
 
 */
 
-// Core
+body {
+    -webkit-text-size-adjust: none;
+}
 
+// Core
 @import "bootstrap/functions";
 @import "custom/functions";
-
 @import "custom/variables";
 @import "bootstrap/variables";
-
 @import "bootstrap/mixins";
 @import "custom/mixins";
-
 // Bootstrap components
-
 @import "bootstrap/root";
 @import "bootstrap/reboot";
 @import "bootstrap/type";
@@ -61,13 +60,12 @@
 @import "bootstrap/carousel";
 @import "bootstrap/utilities";
 @import "bootstrap/print";
-
+//Custom News
+@import "customNews.scss";
 // Custom components
-
 @import "custom/reboot.scss";
 @import "custom/global.scss";
 @import "custom/utilities.scss";
-
 @import "custom/accordion.scss";
 @import "custom/alerts.scss";
 @import "custom/avatars.scss";
@@ -93,13 +91,9 @@
 @import "custom/section.scss";
 @import "custom/separator.scss";
 @import "custom/type.scss";
-
 // Vendor
-
 @import "custom/vendor/bootstrap-datepicker.scss";
 @import "custom/vendor/headroom.scss";
 @import "custom/vendor/nouislider.scss";
-
 // React differences
-
 @import "react/react-differences.scss";

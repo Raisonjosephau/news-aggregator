@@ -9,17 +9,20 @@ import {
   Card,
   CardBody,
   CardImg,
+  CardHeader,
+  CardFooter,
   Container,
   Row,
-  Col
+  Col,
+  FormGroup,
+  Form,
+  Input,
 } from "reactstrap";
 
 // core components
-import DemoNavbar from "components/Navbars/DemoNavbar.jsx";
-import CardsFooter from "components/Footers/CardsFooter.jsx";
-
-// index page sections
-import Download from "./IndexSections/Download.jsx";
+import NewsNavbar from "components/Navbars/NewsNavbar";
+import SimpleFooter from "components/Footers/SimpleFooter";
+import TopHeadlines from "components/News/TopHeadlines"
 
 //Weather
 import {fetchWeather} from '../actions/weatherAction'
@@ -28,7 +31,10 @@ class Landing extends React.Component {
   state = {
     temp:0,
     weather: '',
-    news:[]
+    news:[],
+    sports:[],
+    newsLoading:true,
+    sportsLoading:true
   };
 
   componentDidMount() {
@@ -87,7 +93,7 @@ class Landing extends React.Component {
               let temp = weather.main.temp - 273.15;
               self.setState({ temp: temp.toFixed()});
               self.setState({ weather: result.city+', '+weather.weather[0].description});
-              console.log(weather.weather[0].main)
+              console.log(weather.weather);
           });
        })
 
@@ -95,13 +101,19 @@ class Landing extends React.Component {
     }
 
     
-    axios.get(`https://newsapi.org/v2/top-headlines?country=in&pageSize=10&category=sports&apiKey=8cf5a3d6ce014323aa781af50385aa9d`)
+    axios.get(`https://newsapi.org/v2/top-headlines?country=in&pageSize=6&apiKey=8cf5a3d6ce014323aa781af50385aa9d`)
       .then(res => {
         const news = res.data;
         self.setState({ news: news.articles});
-        console.log(news)
+        self.setState({newsLoading:false});
     });
-    
+
+    axios.get(`https://newsapi.org/v2/top-headlines?country=in&pageSize=4&category=sports&apiKey=8cf5a3d6ce014323aa781af50385aa9d`)
+      .then(res => {
+        const sports = res.data;
+        self.setState({ sports: sports.articles});
+    });
+
   }
 
 
@@ -109,7 +121,7 @@ class Landing extends React.Component {
   render() {
     return (
       <>
-        <DemoNavbar />
+        <NewsNavbar/>
         <main ref="main">
           <div className="position-relative">
             {/* shape Hero */}
@@ -125,120 +137,111 @@ class Landing extends React.Component {
                 <span />
                 <span />
               </div>
-              <Container className="py-lg-md d-flex lign-items-center">
+              <Container className="py-lg-md d-flex align-items-center">
                 <div className="col px-0">
                   <Row>
-                    <Col lg="6">
-                      <h1 className="display-3 text-white font-weight-300">
-                        A beautiful Design System{" "}
+                    <Col lg="12">
+                      <h1 className="display-3 text-white font-weight-400">
+                        The best news aggrigator
                       </h1>
-                   
+                      <p className="lead text-white">Best palce to get your daily news</p>
+                      
                     </Col>
-                    
+                    <Col lg="6 d-flex align-self-center">
+                      <Form>
+                            <Row>
+                              <Col md="9  ">
+                                <FormGroup>
+                                  <Input
+                                    className="form-control-alternative"
+                                    id="exampleFormControlInput1"
+                                    placeholder="What you are looking for"
+                                    type="email"
+                                  />
+                                </FormGroup>
+                              </Col>
+                              <Col md="3">
+                                <Button color="secondary" type="button">
+                                  Search
+                                </Button>
+                              </Col>
+                            </Row>
+                        </Form>
+                      </Col>
+                      <Col lg="6" className="text-right mt-0" >
+                          <h1 className="temp-display font-weight-300 text-white mb-0">
+                          {this.state.temp}&deg; C
+                          </h1>
+                      
+                        <p className="lead temp-desc display-1 text-white mt-0 mb-0 font-weight-300 sentenceCase">
+                        {this.state.weather}
+                        </p>
+                      </Col>
                   </Row>
-                  <Col lg="12" className="text-right mt-0" >
-                      <h1 className="temp-display font-weight-300 text-white mb-0">
-                      {this.state.temp}&deg; C
-                      </h1>
-                     
-                    <p className="lead temp-desc display-1 text-white mt-0 mb-0 font-weight-300 sentenceCase">
-                    {this.state.weather}
-                    </p>
-                    </Col>
                 </div>
               </Container>
               {/* SVG separator */}
-              <div className="separator separator-bottom separator-skew">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  preserveAspectRatio="none"
-                  version="1.1"
-                  viewBox="0 0 2560 100"
-                  x="0"
-                  y="0"
-                >
-                  <polygon
-                    className="fill-white"
-                    points="2560 0 2560 100 0 100"
-                  />
-                </svg>
-              </div>
             </section>
             {/* 1st Hero Variation */}
           </div>
       
           
           <section className="section bg-white">
-            <Container>
-              <Row className="row-grid align-items-center">
-              <Col md="3">
-                  <Card className="bg-white shadow border-0">
-                    <CardImg
-                      alt="..."
-                      src={require("assets/img/theme/img-1-1200x1000.jpg")}
-                      top
-                    />
-                    <blockquote className="card-blockquote pb-0 pt-0 ">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="svg-bg"
-                        preserveAspectRatio="none"
-                        viewBox="0 0 583 95"
-                      >
-                        <polygon
-                          className="fill-white"
-                          points="0,52 583,95 0,95"
-                        />
-                        <polygon
-                          className="fill-white"
-                          opacity=".2"
-                          points="0,42 583,95 683,0 0,95"
-                        />
-                      </svg>
-                      <h6 className="display-4 font-weight-bold pb-0 pt-0 mr-0 mb-0 mt-0">
-                        Top News
-                      </h6>
-                    </blockquote>
-                  </Card>
-                </Col>
-                
-                {
-                this.state.news.map(item=>(                  
-                <Col md="3">
-                      <Card className="bg-white shadow border-0">
-                        <CardImg
-                          alt="..."
-                          src={item.urlToImage}
-                          top
-                        />
-                        <blockquote className="card-blockquote pb-0 pt-0 ">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="svg-bg"
-                            preserveAspectRatio="none"
-                            viewBox="0 0 583 95"
-                          >
-                            <polygon
-                              className="fill-white"
-                              points="0,52 583,95 0,95"
-                            />
-                            <polygon
-                              className="fill-white"
-                              opacity=".2"
-                              points="0,42 583,95 683,0 0,95"
-                            />
-                          </svg>
-                          <h6 className="display-4 font-weight-bold pb-0 pt-0 mr-0 mb-0 mt-0">
-                            Top News
-                          </h6>
-                        </blockquote>
-                      </Card>
-                    </Col>
-                ))
-              }
-                
+              <Row className="row-grid d-flex align-items-stretch mx-5">
+                <Col lg="12">
+                  <Row className="row-grid">
+                      <Col lg="9" md="9" className="d-flex align-self-center">
+                      {
+                        this.state.newsLoading == true?
+                          <div class="loader-container d-flex align-items-center">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                          </div>
+                        
+                         :<TopHeadlines news={this.state.news}></TopHeadlines>
+                      
+                      }
+                        
+
+                                    
+                        {/*  */}
+                      </Col>
+                      <Col md="3" lg="3">
+                          <Card className="bg-white shadow border-0  card-sports">
+                              <CardHeader className="bg-white"><h5 className="h3 mb-0 text-success"> <i className="ni ni-trophy"></i> &nbsp;Top Sports </h5></CardHeader>
+                              <CardBody className="p-0">
+                                  <div className="list-group list-group-flush">
+
+                                  {
+                                    this.state.sportsLoading===true?
+                                    <div class="loader-container d-flex align-items-center">
+                                        <div class="dot"></div>
+                                        <div class="dot"></div>
+                                        <div class="dot"></div>
+                                    </div>
+                                    :
+                                    this.state.sports.map(item=>( 
+                                      <a href="#home" className="list-group-item list-group-item-action flex-column align-items-start py-4 px-4">
+                                        <div className="d-flex w-100 justify-content-between">
+                                          <div>
+                                            <div className="d-flex w-100 align-items-center">
+                                              <h5 className="mb-1">{item.author != null ? item.author: 'Sports Story'}</h5>
+                                            </div>
+                                          </div>
+                                          <small>{item.publishedAt.substring(0, 10)}</small>
+                                        </div>
+                                        <h4 className="mt-3 mb-1"> {item.title}</h4>
+                                      </a>
+                                    ))
+                                  }
+                                </div>
+                              </CardBody>
+                          </Card>
+                      </Col>
+                    </Row>
+                </Col>  
               </Row>
-            </Container>
           </section>
           <section className="section pb-0 bg-gradient-warning">
             <Container>
@@ -561,10 +564,8 @@ class Landing extends React.Component {
               </Card>
             </Container>
           </section>
-          
-          <Download />
         </main>
-        <CardsFooter />
+        <SimpleFooter/>
       </>
     );
   }
