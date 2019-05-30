@@ -112,6 +112,7 @@ class Landing extends React.Component {
       .then(res => {
         const sports = res.data;
         self.setState({ sports: sports.articles});
+        self.setState({ sportsLoading: false});
     });
 
   }
@@ -156,7 +157,7 @@ class Landing extends React.Component {
                                     className="form-control-alternative"
                                     id="exampleFormControlInput1"
                                     placeholder="What you are looking for"
-                                    type="email"
+                                    type="text"
                                   />
                                 </FormGroup>
                               </Col>
@@ -193,13 +194,13 @@ class Landing extends React.Component {
                       <Col lg="9" md="9" className="d-flex align-self-center">
                       {
                         this.state.newsLoading == true?
-                          <div class="loader-container d-flex align-items-center">
-                            <div class="dot"></div>
-                            <div class="dot"></div>
-                            <div class="dot"></div>
+                          <div className="loader-container d-flex align-items-center">
+                            <div className="dot"></div>
+                            <div className="dot"></div>
+                            <div className="dot"></div>
                           </div>
                         
-                         :<TopHeadlines news={this.state.news}></TopHeadlines>
+                         :<TopHeadlines news={this.state.news} title ="Top Headlines"></TopHeadlines>
                       
                       }
                         
@@ -209,16 +210,17 @@ class Landing extends React.Component {
                       </Col>
                       <Col md="3" lg="3">
                           <Card className="bg-white shadow border-0  card-sports">
-                              <CardHeader className="bg-white"><h5 className="h3 mb-0 text-success"> <i className="ni ni-trophy"></i> &nbsp;Top Sports </h5></CardHeader>
+                              <CardHeader className="bg-white"><h5 className="h3 mb-0 text-success"> <i className="ni ni-trophy"></i> &nbsp;Sports </h5></CardHeader>
                               <CardBody className="p-0">
+                                    
                                   <div className="list-group list-group-flush">
 
                                   {
                                     this.state.sportsLoading===true?
-                                    <div class="loader-container d-flex align-items-center">
-                                        <div class="dot"></div>
-                                        <div class="dot"></div>
-                                        <div class="dot"></div>
+                                    <div className="d-flex align-self-center mt-4 mb-4">
+                                        <div className="dot"></div>
+                                        <div className="dot"></div>
+                                        <div className="dot"></div>
                                     </div>
                                     :
                                     this.state.sports.map(item=>( 
@@ -243,88 +245,48 @@ class Landing extends React.Component {
                 </Col>  
               </Row>
           </section>
-          <section className="section pb-0 bg-gradient-warning">
+          <section className="section pb-0 bg-gradient-secondary">
             <Container>
               <Row className="row-grid align-items-center">
-                <Col className="order-lg-2 ml-lg-auto" md="6">
-                  <div className="position-relative pl-md-5">
-                    <img
-                      alt="..."
-                      className="img-center img-fluid"
-                      src={require("assets/img/ill/ill-2.svg")}
-                    />
-                  </div>
-                </Col>
-                <Col className="order-lg-1" lg="6">
-                  <div className="d-flex px-3">
-                    <div>
-                      <div className="icon icon-lg icon-shape bg-gradient-white shadow rounded-circle text-primary">
-                        <i className="ni ni-building text-primary" />
-                      </div>
-                    </div>
-                    <div className="pl-4">
-                      <h4 className="display-3 text-white">Modern Interface</h4>
-                      <p className="text-white">
-                        The Arctic Ocean freezes every winter and much of the
-                        sea-ice then thaws every summer, and that process will
-                        continue whatever.
-                      </p>
-                    </div>
-                  </div>
+              <Col className="order-lg-1" lg="4">
                   <Card className="shadow shadow-lg--hover mt-5">
                     <CardBody>
-                      <div className="d-flex px-3">
-                        <div>
-                          <div className="icon icon-shape bg-gradient-success rounded-circle text-white">
-                            <i className="ni ni-satisfied" />
-                          </div>
-                        </div>
-                        <div className="pl-4">
-                          <h5 className="title text-success">
-                            Awesome Support
-                          </h5>
-                          <p>
-                            The Arctic Ocean freezes every winter and much of
-                            the sea-ice then thaws every summer, and that
-                            process will continue whatever.
-                          </p>
-                          <a
-                            className="text-success"
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Learn more
-                          </a>
-                        </div>
-                      </div>
+                      <h2 class="my-10 text-center"><b>Entertainment</b></h2>
                     </CardBody>
                   </Card>
+                </Col>
+                <Col className="order-lg-1" lg="4">
                   <Card className="shadow shadow-lg--hover mt-5">
                     <CardBody>
-                      <div className="d-flex px-3">
-                        <div>
-                          <div className="icon icon-shape bg-gradient-warning rounded-circle text-white">
-                            <i className="ni ni-active-40" />
-                          </div>
-                        </div>
-                        <div className="pl-4">
-                          <h5 className="title text-warning">
-                            Modular Components
-                          </h5>
-                          <p>
-                            The Arctic Ocean freezes every winter and much of
-                            the sea-ice then thaws every summer, and that
-                            process will continue whatever.
-                          </p>
-                          <a
-                            className="text-warning"
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Learn more
-                          </a>
-                        </div>
-                      </div>
+                      <h2 class="my-10 text-center"><b>Sports</b></h2>
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col className="order-lg-1" lg="4">
+                  <Card className="shadow shadow-lg--hover mt-5">
+                    <CardBody>
+                      <h2 class="my-10 text-center"><b>Health</b></h2>
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col className="order-lg-1" lg="4">
+                  <Card className="shadow shadow-lg--hover mt-5">
+                    <CardBody>
+                      <h2 class="my-10 text-center"><b>Technology</b></h2>
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col className="order-lg-1" lg="4">
+                  <Card className="shadow shadow-lg--hover mt-5">
+                    <CardBody>
+                      <h2 class="my-10 text-center"><b>Science</b></h2>
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col className="order-lg-1" lg="4">
+                  <Card className="shadow shadow-lg--hover mt-5">
+                    <CardBody>
+                      <h2 class="my-10 text-center"><b>Buisness</b></h2>
                     </CardBody>
                   </Card>
                 </Col>
