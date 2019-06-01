@@ -24,7 +24,7 @@ class TopHeadlines extends React.Component{
   render() {
     return (
       <Row className="d-flex align-items-stretch">
-          <h3 className="mb-0 mt-3 font-weight-800">Top Headlines</h3>
+          <h3 className="mb-0 mt-3 font-weight-800">{this.props.title}</h3>
           <div className="w-100 dropdown-divider"></div>
          {this.props.news.map(item=>(                  
           <Col md="6" lg="4" className="p-2 d-flex align-items-stretch">

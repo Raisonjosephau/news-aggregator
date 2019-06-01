@@ -28,14 +28,22 @@ import TopHeadlines from "components/News/TopHeadlines"
 import {fetchWeather} from '../actions/weatherAction'
 
 class Landing extends React.Component {
-  state = {
-    temp:0,
-    weather: '',
-    news:[],
-    sports:[],
-    newsLoading:true,
-    sportsLoading:true
-  };
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      temp:0,
+      weather: '',
+      news:[],
+      sports:[],
+      search:[],
+      newsLoading:true,
+      sportsLoading:true,
+      searchData:''
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.searchNews = this.searchNews.bind(this);
+  }
 
   componentDidMount() {
     document.documentElement.scrollTop = 0;
@@ -108,7 +116,7 @@ class Landing extends React.Component {
         self.setState({newsLoading:false});
     });
 
-    axios.get(`https://newsapi.org/v2/top-headlines?country=in&pageSize=4&category=sports&apiKey=8cf5a3d6ce014323aa781af50385aa9d`)
+    axios.get(`https://newsapi.org/v2/top-headlines?country=in&pageSize=5&category=sports&apiKey=8cf5a3d6ce014323aa781af50385aa9d`)
       .then(res => {
         const sports = res.data;
         self.setState({ sports: sports.articles});
@@ -116,7 +124,22 @@ class Landing extends React.Component {
     });
 
   }
+  
+  handleChange(event) {
+    this.setState({searchData: event.target.value});
+  }
 
+  searchNews(event){  
+    event.preventDefault();
+    const query = this.state.searchData;
+    this.setState({ newsLoading: true});
+    axios.get(`https://newsapi.org/v2/everything?q=${query}&pageSize=9&sortBy=relevancy&apiKey=8cf5a3d6ce014323aa781af50385aa9d`)
+      .then(res => {
+        const search = res.data;
+        this.setState({ search: search.articles});
+        this.setState({ newsLoading: false});
+    });
+  }
 
   
   render() {
@@ -126,8 +149,8 @@ class Landing extends React.Component {
         <main ref="main">
           <div className="position-relative">
             {/* shape Hero */}
-            <section className="section section-lg section-shaped section-hero">
-              <div className="shape shape-style-1 shape-default">
+            <section className="section section-lg section-shaped section-hero pb-0">
+              <div className="shape shape-style-1 shape-primary bg-gradient-danger">
                 <span />
                 <span />
                 <span />
@@ -138,45 +161,51 @@ class Landing extends React.Component {
                 <span />
                 <span />
               </div>
-              <Container className="py-lg-md d-flex align-items-center">
+              <Container className="py-lg-md d-flex align-items-center pb-0">
                 <div className="col px-0">
                   <Row>
                     <Col lg="12">
-                      <h1 className="display-3 text-white font-weight-400">
-                        The best news aggrigator
+                      <h1 className="display-2 text-white font-weight-800">
+                        The reason behind everything
                       </h1>
                       <p className="lead text-white">Best palce to get your daily news</p>
                       
                     </Col>
-                    <Col lg="6 d-flex align-self-center">
-                      <Form>
+                    <Col md="8" lg="8" className="mx-auto my-auto">
+                      <Form onSubmit={this.searchNews}>
                             <Row>
-                              <Col md="9  ">
+                              <Col md="8" lg="8">
                                 <FormGroup>
                                   <Input
                                     className="form-control-alternative"
-                                    id="exampleFormControlInput1"
+                                    id="search"
+                                    name="search"
                                     placeholder="What you are looking for"
                                     type="text"
+                                    onChange={this.handleChange}
                                   />
                                 </FormGroup>
                               </Col>
-                              <Col md="3">
-                                <Button color="secondary" type="button">
+                              <Col md="3" lg="3">
+                                <Button color="secondary" type="submit">
                                   Search
                                 </Button>
                               </Col>
                             </Row>
                         </Form>
                       </Col>
-                      <Col lg="6" className="text-right mt-0" >
-                          <h1 className="temp-display font-weight-300 text-white mb-0">
-                          {this.state.temp}&deg; C
-                          </h1>
-                      
-                        <p className="lead temp-desc display-1 text-white mt-0 mb-0 font-weight-300 sentenceCase">
-                        {this.state.weather}
-                        </p>
+                      <Col lg="4"  md="4" className="text-right mt-0 mb-0 " >
+                          
+                         <div class="temperature entypo-light-up">
+
+                              <h2 className="text-white mb-0">
+                                {this.state.temp}<span class="degree-symbol">°c</span>
+                              </h2>
+                            
+                              <p className="lead temp-desc display-1 text-white my-0 font-weight-light sentenceCase">
+                              {this.state.weather}
+                              </p>
+                        </div>
                       </Col>
                   </Row>
                 </div>
@@ -193,14 +222,15 @@ class Landing extends React.Component {
                   <Row className="row-grid">
                       <Col lg="9" md="9" className="d-flex align-self-center">
                       {
-                        this.state.newsLoading == true?
+                        this.state.newsLoading === true?
                           <div className="loader-container d-flex align-items-center">
                             <div className="dot"></div>
                             <div className="dot"></div>
                             <div className="dot"></div>
                           </div>
                         
-                         :<TopHeadlines news={this.state.news} title ="Top Headlines"></TopHeadlines>
+                         :this.state.search.length === 0?<TopHeadlines news={this.state.news} title ="Top Headlines"></TopHeadlines>
+                         :<TopHeadlines news={this.state.search} title ="Search results"></TopHeadlines>
                       
                       }
                         
@@ -224,307 +254,22 @@ class Landing extends React.Component {
                                     </div>
                                     :
                                     this.state.sports.map(item=>( 
-                                      <a href="#home" className="list-group-item list-group-item-action flex-column align-items-start py-4 px-4">
-                                        <div className="d-flex w-100 justify-content-between">
-                                          <div>
-                                            <div className="d-flex w-100 align-items-center">
+                                      <a href={item.url} target="_blank" className="list-group-item list-group-item-action flex-column align-items-start py-4 px-4">
+                                      
+                                            <div className="sports-autor">
                                               <h5 className="mb-1">{item.author != null ? item.author: 'Sports Story'}</h5>
                                             </div>
-                                          </div>
-                                          <small>{item.publishedAt.substring(0, 10)}</small>
-                                        </div>
                                         <h4 className="mt-3 mb-1"> {item.title}</h4>
                                       </a>
                                     ))
                                   }
                                 </div>
-                              </CardBody>
+                              </CardBody> 
                           </Card>
                       </Col>
                     </Row>
                 </Col>  
               </Row>
-          </section>
-          <section className="section pb-0 bg-gradient-secondary">
-            <Container>
-              <Row className="row-grid align-items-center">
-              <Col className="order-lg-1" lg="4">
-                  <Card className="shadow shadow-lg--hover mt-5">
-                    <CardBody>
-                      <h2 class="my-10 text-center"><b>Entertainment</b></h2>
-                    </CardBody>
-                  </Card>
-                </Col>
-                <Col className="order-lg-1" lg="4">
-                  <Card className="shadow shadow-lg--hover mt-5">
-                    <CardBody>
-                      <h2 class="my-10 text-center"><b>Sports</b></h2>
-                    </CardBody>
-                  </Card>
-                </Col>
-                <Col className="order-lg-1" lg="4">
-                  <Card className="shadow shadow-lg--hover mt-5">
-                    <CardBody>
-                      <h2 class="my-10 text-center"><b>Health</b></h2>
-                    </CardBody>
-                  </Card>
-                </Col>
-                <Col className="order-lg-1" lg="4">
-                  <Card className="shadow shadow-lg--hover mt-5">
-                    <CardBody>
-                      <h2 class="my-10 text-center"><b>Technology</b></h2>
-                    </CardBody>
-                  </Card>
-                </Col>
-                <Col className="order-lg-1" lg="4">
-                  <Card className="shadow shadow-lg--hover mt-5">
-                    <CardBody>
-                      <h2 class="my-10 text-center"><b>Science</b></h2>
-                    </CardBody>
-                  </Card>
-                </Col>
-                <Col className="order-lg-1" lg="4">
-                  <Card className="shadow shadow-lg--hover mt-5">
-                    <CardBody>
-                      <h2 class="my-10 text-center"><b>Buisness</b></h2>
-                    </CardBody>
-                  </Card>
-                </Col>
-              </Row>
-            </Container>
-            {/* SVG separator */}
-            <div className="separator separator-bottom separator-skew zindex-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio="none"
-                version="1.1"
-                viewBox="0 0 2560 100"
-                x="0"
-                y="0"
-              >
-                <polygon
-                  className="fill-white"
-                  points="2560 0 2560 100 0 100"
-                />
-              </svg>
-            </div>
-          </section>
-          <section className="section section-lg">
-            <Container>
-              <Row className="justify-content-center text-center mb-lg">
-                <Col lg="8">
-                  <h2 className="display-3">The amazing Team</h2>
-                  <p className="lead text-muted">
-                    According to the National Oceanic and Atmospheric
-                    Administration, Ted, Scambos, NSIDClead scentist, puts the
-                    potentially record maximum.
-                  </p>
-                </Col>
-              </Row>
-              <Row>
-                <Col className="mb-5 mb-lg-0" lg="3" md="6">
-                  <div className="px-4">
-                    <img
-                      alt="..."
-                      className=" img-center img-fluid shadow shadow-lg--hover"
-                      src={require("assets/img/theme/team-1-800x800.jpg")}
-                      style={{ width: "200px" }}
-                    />
-                    <div className="pt-4 text-center">
-                      <h5 className="title">
-                        <span className="d-block mb-1">Ryan Tompson</span>
-                        <small className="h6 text-muted">Web Developer</small>
-                      </h5>
-                      <div className="mt-3">
-                        <Button
-                          className="btn-icon-only rounded-circle"
-                          color="warning"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-twitter" />
-                        </Button>
-                        <Button
-                          className="btn-icon-only rounded-circle ml-1"
-                          color="warning"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-facebook" />
-                        </Button>
-                        <Button
-                          className="btn-icon-only rounded-circle ml-1"
-                          color="warning"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-dribbble" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-                <Col className="mb-5 mb-lg-0" lg="3" md="6">
-                  <div className="px-4">
-                    <img
-                      alt="..."
-                      className="rounded-circle img-center img-fluid shadow shadow-lg--hover"
-                      src={require("assets/img/theme/team-2-800x800.jpg")}
-                      style={{ width: "200px" }}
-                    />
-                    <div className="pt-4 text-center">
-                      <h5 className="title">
-                        <span className="d-block mb-1">Romina Hadid</span>
-                        <small className="h6 text-muted">
-                          Marketing Strategist
-                        </small>
-                      </h5>
-                      <div className="mt-3">
-                        <Button
-                          className="btn-icon-only rounded-circle"
-                          color="primary"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-twitter" />
-                        </Button>
-                        <Button
-                          className="btn-icon-only rounded-circle ml-1"
-                          color="primary"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-facebook" />
-                        </Button>
-                        <Button
-                          className="btn-icon-only rounded-circle ml-1"
-                          color="primary"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-dribbble" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-                <Col className="mb-5 mb-lg-0" lg="3" md="6">
-                  <div className="px-4">
-                    <img
-                      alt="..."
-                      className="rounded-circle img-center img-fluid shadow shadow-lg--hover"
-                      src={require("assets/img/theme/team-3-800x800.jpg")}
-                      style={{ width: "200px" }}
-                    />
-                    <div className="pt-4 text-center">
-                      <h5 className="title">
-                        <span className="d-block mb-1">Alexander Smith</span>
-                        <small className="h6 text-muted">UI/UX Designer</small>
-                      </h5>
-                      <div className="mt-3">
-                        <Button
-                          className="btn-icon-only rounded-circle"
-                          color="info"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-twitter" />
-                        </Button>
-                        <Button
-                          className="btn-icon-only rounded-circle ml-1"
-                          color="info"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-facebook" />
-                        </Button>
-                        <Button
-                          className="btn-icon-only rounded-circle ml-1"
-                          color="info"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-dribbble" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-                <Col className="mb-5 mb-lg-0" lg="3" md="6">
-                  <div className="px-4">
-                    <img
-                      alt="..."
-                      className="rounded-circle img-center img-fluid shadow shadow-lg--hover"
-                      src={require("assets/img/theme/team-4-800x800.jpg")}
-                      style={{ width: "200px" }}
-                    />
-                    <div className="pt-4 text-center">
-                      <h5 className="title">
-                        <span className="d-block mb-1">John Doe</span>
-                        <small className="h6 text-muted">Founder and CEO</small>
-                      </h5>
-                      <div className="mt-3">
-                        <Button
-                          className="btn-icon-only rounded-circle"
-                          color="success"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-twitter" />
-                        </Button>
-                        <Button
-                          className="btn-icon-only rounded-circle ml-1"
-                          color="success"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-facebook" />
-                        </Button>
-                        <Button
-                          className="btn-icon-only rounded-circle ml-1"
-                          color="success"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fa fa-dribbble" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-            </Container>
-          </section>
-          <section className="section section-lg pt-0">
-            <Container>
-              <Card className="bg-gradient-warning shadow-lg border-0">
-                <div className="p-5">
-                  <Row className="align-items-center">
-                    <Col lg="8">
-                      <h3 className="text-white">
-                        We made website building easier for you.
-                      </h3>
-                      <p className="lead text-white mt-3">
-                        I will be the leader of a company that ends up being
-                        worth billions of dollars, because I got the answers. I
-                        understand culture.
-                      </p>
-                    </Col>
-                    <Col className="ml-lg-auto" lg="3">
-                      <Button
-                        block
-                        className="btn-white"
-                        color="default"
-                        href="https://www.creative-tim.com/product/argon-design-system-react?ref=adsr-landing-page"
-                        size="lg"
-                      >
-                        Download React
-                      </Button>
-                    </Col>
-                  </Row>
-                </div>
-              </Card>
-            </Container>
           </section>
         </main>
         <SimpleFooter/>

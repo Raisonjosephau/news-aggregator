@@ -20,6 +20,18 @@
         height: 210px;
         max-height: 210px;
     }
+    .sports-autor {
+        width: 90%;
+        overflow: hidden;
+    }
+}
+
+.temp-display {
+    font-size: 8em !important;
+}
+
+.temp-desc {
+    font-size: 1.6rem;
 }
 
 .loader-container {
@@ -70,5 +82,34 @@
     }
     100% {
         opacity: 0;
+    }
+}
+
+.temperature {
+    color: #3D414C;
+    font-size: 5em;
+    transition: color 0.5s ease;
+    &:hover {
+        color: yellow;
+    }
+    h2 {
+        display: inline;
+        color: #eee;
+        font-weight: 100;
+        font-size: 8rem;
+        font-family: 'Poppins';
+        span.degree-symbol {
+            display: inline-block;
+            margin: 0px 5px;
+            font-size: 0.6em;
+            vertical-align: top;
+        }
+        span.celcius {
+            display: inline-block;
+            margin: 10px 0px 0px 15px;
+            color: #3D414C;
+            font-size: 0.3em;
+            vertical-align: top;
+        }
     }
 }

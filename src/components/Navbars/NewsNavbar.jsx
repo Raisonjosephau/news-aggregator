@@ -28,7 +28,7 @@ class DemoNavbar extends React.Component {
           >
             <Container>
               <NavbarBrand className="mr-lg-5" to="/" tag={Link}>
-                <h2 className="text-white text-capitalize font-weight-500">GNews</h2>
+                <h2 className="text-white text-capitalize font-weight-700">Quite Light</h2>
               </NavbarBrand>
               <button className="navbar-toggler" id="navbar_global">
                 <span className="navbar-toggler-icon" />
@@ -38,7 +38,7 @@ class DemoNavbar extends React.Component {
                   <Row>
                     <Col className="collapse-brand" xs="6">
                       <Link to="/">
-                        GNews
+                        Quiet Light
                       </Link>
                     </Col>
                     <Col className="collapse-close" xs="6">
