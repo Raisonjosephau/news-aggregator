@@ -24,8 +24,6 @@ import NewsNavbar from "components/Navbars/NewsNavbar";
 import SimpleFooter from "components/Footers/SimpleFooter";
 import TopHeadlines from "components/News/TopHeadlines"
 
-//Weather
-import {fetchWeather} from '../actions/weatherAction'
 
 class Landing extends React.Component {
   
@@ -126,6 +124,7 @@ class Landing extends React.Component {
   }
   
   handleChange(event) {
+    if( event.target.value === "") this.setState({search:[]})
     this.setState({searchData: event.target.value});
   }
 
@@ -230,7 +229,7 @@ class Landing extends React.Component {
                           </div>
                         
                          :this.state.search.length === 0?<TopHeadlines news={this.state.news} title ="Top Headlines"></TopHeadlines>
-                         :<TopHeadlines news={this.state.search} title ="Search results"></TopHeadlines>
+                         :<TopHeadlines news={this.state.search} title ={"Search results for '" + this.state.searchData+ "'"}></TopHeadlines>
                       
                       }
                         

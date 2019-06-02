@@ -48,7 +48,7 @@ class TopHeadlines extends React.Component{
                           href={item.url}
                           target="_blank"
                         >
-                          Learn more
+                          Read more
                         </a>
                   </CardFooter>
                     </Card>
