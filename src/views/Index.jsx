@@ -8,9 +8,7 @@ import {
   Button,
   Card,
   CardBody,
-  CardImg,
-  CardHeader,
-  CardFooter,
+  CardHeader, 
   Container,
   Row,
   Col,
@@ -233,9 +231,6 @@ class Landing extends React.Component {
                       
                       }
                         
-
-                                    
-                        {/*  */}
                       </Col>
                       <Col md="3" lg="3">
                           <Card className="bg-white shadow border-0  card-sports">
@@ -253,7 +248,7 @@ class Landing extends React.Component {
                                     </div>
                                     :
                                     this.state.sports.map(item=>( 
-                                      <a href={item.url} target="_blank" className="list-group-item list-group-item-action flex-column align-items-start py-4 px-4">
+                                      <a href={item.url} target="_blank" rel="noopener noreferrer" className="list-group-item list-group-item-action flex-column align-items-start py-4 px-4">
                                       
                                             <div className="sports-autor">
                                               <h5 className="mb-1">{item.author != null ? item.author: 'Sports Story'}</h5>

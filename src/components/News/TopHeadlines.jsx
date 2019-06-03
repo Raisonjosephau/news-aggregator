@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React from "react";
 import {
   Card,
@@ -47,6 +46,7 @@ class TopHeadlines extends React.Component{
                           className="text-success"
                           href={item.url}
                           target="_blank"
+                          rel="noopener noreferrer"
                         >
                           Read more
                         </a>
