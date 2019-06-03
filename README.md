@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## UI -  Argon Design System by Creative Tim    
 
-Argon UI is used because it is primarly a bootstrap based design and also use Reactstrap as base framework. The UI contains only basic elements. Its best for a simple websiite and also it is ranked as trending now.
+Argon UI is used because it is primarly a bootstrap based design and also use Reactstrap as base framework. The UI contains only basic elements and responsive. Its best for a simple websiite and also it is ranked as trending now. It have been used by [Gnews]( https://gnews.io) and some others. 
 
 ## Weather Information
 
