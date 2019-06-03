@@ -12,4 +12,4 @@ Weather information are based on the gelocation given from the browser. If user 
 
 ## News 
 
-App shows the top headlines and sports news on the page. User can also search for the news. Only limeted number of news is fethced from the API. News are fetched from [Open Weather API](https://openweathermap.org/)
+App shows the top headlines and sports news on the page. User can also search for the news. Only limeted number of news is fethced from the API. News are fetched from [News API](https://newsapi.org/)
