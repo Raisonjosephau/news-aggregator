@@ -22,6 +22,8 @@ import NewsNavbar from "components/Navbars/NewsNavbar";
 import SimpleFooter from "components/Footers/SimpleFooter";
 import TopHeadlines from "components/News/TopHeadlines"
 
+//APIs
+import {getWeather, getSportsTopHeadlines} from '../services/news'
 
 class Landing extends React.Component {
   
@@ -37,87 +39,50 @@ class Landing extends React.Component {
       sportsLoading:true,
       searchData:''
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.searchNews = this.searchNews.bind(this);
+
   }
 
   componentDidMount() {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     this.refs.main.scrollTop = 0;
+    let self = this;
+    getNews();
 
-    const self = this;
-    
-    let lat, lng;
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(displayLocationInfo, getIPLocation);
-    } else {
-       
-    }
+      navigator.geolocation.getCurrentPosition(displayWeather, getIPLocation);
+    } 
     
-    function displayLocationInfo(position) {
-       lng = position.coords.longitude;
-       lat = position.coords.latitude;
-       let data = {lat: lat, lon:lng, "APPID": "c5777ded81048ee9a0dd2cac5144ee57"};
-       let params = '?';
-       for (const key in data) {
-       params += `${key}=${data[key]}&`;
-       }
-       params = params.slice(0, -1);
-
-       axios.get(`http://api.openweathermap.org/data/2.5/weather${params}`)
-        .then(res => {
-          const weather = res.data;
-          let temp = weather.main.temp - 273.15;
-          self.setState({ temp: temp.toFixed()});
-          self.setState({ weather: weather.weather[0].description});
-          console.log(weather.weather[0].main)
-       })
+    async function displayWeather(position) {
+        let lng = position.coords.longitude;
+        let lat = position.coords.latitude; 
+        let data = await getWeather(lng, lat)
+        self.setState({ temp: data.temp});
+        self.setState({ weather: data.weather});
     }
-    
 
-    function getIPLocation(error){
+    async function getNews(){
+        self.setState({newsLoading:true, sportsLoading:true})
+        let news = await getSportsTopHeadlines();
+        self.setState({news:news.topheadlines, sports:news.sports})
+        self.setState({newsLoading:false, sportsLoading:false}) 
+    }
+
+    async function getIPLocation(error){
 
       let result= [];
       axios.get(`http://ip-api.com/json`)
-       .then(res => {
+       .then(async res => {
           result = res.data;
-
-         
-          let data = {lat: result.lat, lon: result.lon, "APPID": "c5777ded81048ee9a0dd2cac5144ee57"};
-          let params = '?';
-          for (const key in data) {
-          params += `${key}=${data[key]}&`;
-          }
-          params = params.slice(0, -1);
-
-          axios.get(`http://api.openweathermap.org/data/2.5/weather${params}`)
-            .then(res => {
-              const weather = res.data;
-              let temp = weather.main.temp - 273.15;
-              self.setState({ temp: temp.toFixed()});
-              self.setState({ weather: result.city+', '+weather.weather[0].description});
-              console.log(weather.weather);
-          });
+          let data = await getWeather(result.lon, result.lat)
+          self.setState({ temp: data.temp});
+          self.setState({ weather: result.city+', '+data.weather});    
        })
-
-
     }
 
-    
-    axios.get(`https://newsapi.org/v2/top-headlines?country=in&pageSize=6&apiKey=8cf5a3d6ce014323aa781af50385aa9d`)
-      .then(res => {
-        const news = res.data;
-        self.setState({ news: news.articles});
-        self.setState({newsLoading:false});
-    });
-
-    axios.get(`https://newsapi.org/v2/top-headlines?country=in&pageSize=5&category=sports&apiKey=8cf5a3d6ce014323aa781af50385aa9d`)
-      .then(res => {
-        const sports = res.data;
-        self.setState({ sports: sports.articles});
-        self.setState({ sportsLoading: false});
-    });
 
   }
   
