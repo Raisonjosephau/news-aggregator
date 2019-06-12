@@ -1,48 +1,47 @@
 import React from "react";
 // nodejs library that concatenates classes
 
-import axios from 'axios'
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 // reactstrap components
 import {
   Button,
   Card,
   CardBody,
-  CardHeader, 
+  CardHeader,
   Container,
   Row,
   Col,
   FormGroup,
   Form,
-  Input,
+  Input
 } from "reactstrap";
 
 // core components
 import NewsNavbar from "components/Navbars/NewsNavbar";
 import SimpleFooter from "components/Footers/SimpleFooter";
-import TopHeadlines from "components/News/TopHeadlines"
+import TopHeadlines from "components/News/TopHeadlines";
 
 //APIs
-import {getWeather, getSportsTopHeadlines} from '../services/news'
+import { getWeather, getSportsTopHeadlines } from "../services/news";
 
-class Landing extends React.Component {
-  
+class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      temp:0,
-      weather: '',
-      news:[],
-      sports:[],
-      search:[],
-      newsLoading:true,
-      sportsLoading:true,
-      searchData:''
+      temp: 0,
+      weather: "",
+      news: [],
+      sports: [],
+      search: [],
+      newsLoading: true,
+      sportsLoading: true,
+      searchData: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.searchNews = this.searchNews.bind(this);
-
   }
 
   componentDidMount() {
@@ -54,60 +53,58 @@ class Landing extends React.Component {
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(displayWeather, getIPLocation);
-    } 
-    
+    }
+
     async function displayWeather(position) {
-        let lng = position.coords.longitude;
-        let lat = position.coords.latitude; 
-        let data = await getWeather(lng, lat)
-        self.setState({ temp: data.temp});
-        self.setState({ weather: data.weather});
+      let lng = position.coords.longitude;
+      let lat = position.coords.latitude;
+      let data = await getWeather(lng, lat);
+      self.setState({ temp: data.temp });
+      self.setState({ weather: data.weather });
     }
 
-    async function getNews(){
-        self.setState({newsLoading:true, sportsLoading:true})
-        let news = await getSportsTopHeadlines();
-        self.setState({news:news.topheadlines, sports:news.sports})
-        self.setState({newsLoading:false, sportsLoading:false}) 
+    async function getNews() {
+      self.setState({ newsLoading: true, sportsLoading: true });
+      let news = await getSportsTopHeadlines();
+      self.setState({ news: news.topheadlines, sports: news.sports });
+      self.setState({ newsLoading: false, sportsLoading: false });
     }
 
-    async function getIPLocation(error){
-
-      let result= [];
-      axios.get(`http://ip-api.com/json`)
-       .then(async res => {
-          result = res.data;
-          let data = await getWeather(result.lon, result.lat)
-          self.setState({ temp: data.temp});
-          self.setState({ weather: result.city+', '+data.weather});    
-       })
+    async function getIPLocation(error) {
+      let result = [];
+      axios.get(`http://ip-api.com/json`).then(async res => {
+        result = res.data;
+        let data = await getWeather(result.lon, result.lat);
+        self.setState({ temp: data.temp });
+        self.setState({ weather: result.city + ", " + data.weather });
+      });
     }
-
-
   }
-  
+
   handleChange(event) {
-    if( event.target.value === "") this.setState({search:[]})
-    this.setState({searchData: event.target.value});
+    if (event.target.value === "") this.setState({ search: [] });
+    this.setState({ searchData: event.target.value });
   }
 
-  searchNews(event){  
+  searchNews(event) {
     event.preventDefault();
     const query = this.state.searchData;
-    this.setState({ newsLoading: true});
-    axios.get(`https://newsapi.org/v2/everything?q=${query}&pageSize=9&sortBy=relevancy&apiKey=8cf5a3d6ce014323aa781af50385aa9d`)
+    this.setState({ newsLoading: true });
+    axios
+      .get(
+        `https://newsapi.org/v2/everything?q=${query}&pageSize=9&sortBy=relevancy&apiKey=8cf5a3d6ce014323aa781af50385aa9d`
+      )
       .then(res => {
         const search = res.data;
-        this.setState({ search: search.articles});
-        this.setState({ newsLoading: false});
-    });
+        this.setState({ search: search.articles });
+        this.setState({ newsLoading: false });
+      });
   }
 
-  
   render() {
     return (
       <>
-        <NewsNavbar/>
+        <NewsNavbar />
         <main ref="main">
           <div className="position-relative">
             {/* shape Hero */}
@@ -130,45 +127,45 @@ class Landing extends React.Component {
                       <h1 className="display-2 text-white font-weight-800">
                         The reason behind everything
                       </h1>
-                      <p className="lead text-white">Best palce to get your daily news</p>
-                      
+                      <p className="lead text-white">
+                        Best palce to get your daily news
+                      </p>
                     </Col>
                     <Col md="8" lg="8" className="mx-auto my-auto">
                       <Form onSubmit={this.searchNews}>
-                            <Row>
-                              <Col md="8" lg="8">
-                                <FormGroup>
-                                  <Input
-                                    className="form-control-alternative"
-                                    id="search"
-                                    name="search"
-                                    placeholder="What you are looking for"
-                                    type="text"
-                                    onChange={this.handleChange}
-                                  />
-                                </FormGroup>
-                              </Col>
-                              <Col md="3" lg="3">
-                                <Button color="secondary" type="submit">
-                                  Search
-                                </Button>
-                              </Col>
-                            </Row>
-                        </Form>
-                      </Col>
-                      <Col lg="4"  md="4" className="text-right mt-0 mb-0 " >
-                          
-                         <div class="temperature entypo-light-up">
+                        <Row>
+                          <Col md="8" lg="8">
+                            <FormGroup>
+                              <Input
+                                className="form-control-alternative"
+                                id="search"
+                                name="search"
+                                placeholder="What you are looking for"
+                                type="text"
+                                onChange={this.handleChange}
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col md="3" lg="3">
+                            <Button color="secondary" type="submit">
+                              Search
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </Col>
+                    <Col lg="4" md="4" className="text-right mt-0 mb-0 ">
+                      <div className="temperature entypo-light-up">
+                        <h2 className="text-white mb-0">
+                          {this.state.temp}
+                          <span className="degree-symbol">°c</span>
+                        </h2>
 
-                              <h2 className="text-white mb-0">
-                                {this.state.temp}<span class="degree-symbol">°c</span>
-                              </h2>
-                            
-                              <p className="lead temp-desc display-1 text-white my-0 font-weight-light sentenceCase">
-                              {this.state.weather}
-                              </p>
-                        </div>
-                      </Col>
+                        <p className="lead temp-desc display-1 text-white my-0 font-weight-light sentenceCase">
+                          {this.state.weather}
+                        </p>
+                      </div>
+                    </Col>
                   </Row>
                 </div>
               </Container>
@@ -176,65 +173,89 @@ class Landing extends React.Component {
             </section>
             {/* 1st Hero Variation */}
           </div>
-      
-          
-          <section className="section bg-white">
-              <Row className="row-grid d-flex align-items-stretch mx-5">
-                <Col lg="12">
-                  <Row className="row-grid">
-                      <Col lg="9" md="9" className="d-flex align-self-center">
-                      {
-                        this.state.newsLoading === true?
-                          <div className="loader-container d-flex align-items-center">
-                            <div className="dot"></div>
-                            <div className="dot"></div>
-                            <div className="dot"></div>
-                          </div>
-                        
-                         :this.state.search.length === 0?<TopHeadlines news={this.state.news} title ="Top Headlines"></TopHeadlines>
-                         :<TopHeadlines news={this.state.search} title ={"Search results for '" + this.state.searchData+ "'"}></TopHeadlines>
-                      
-                      }
-                        
-                      </Col>
-                      <Col md="3" lg="3">
-                          <Card className="bg-white shadow border-0  card-sports">
-                              <CardHeader className="bg-white"><h5 className="h3 mb-0 text-success"> <i className="ni ni-trophy"></i> &nbsp;Sports </h5></CardHeader>
-                              <CardBody className="p-0">
-                                    
-                                  <div className="list-group list-group-flush">
 
-                                  {
-                                    this.state.sportsLoading===true?
-                                    <div className="d-flex align-self-center mt-4 mb-4">
-                                        <div className="dot"></div>
-                                        <div className="dot"></div>
-                                        <div className="dot"></div>
-                                    </div>
-                                    :
-                                    this.state.sports.map(item=>( 
-                                      <a href={item.url} target="_blank" rel="noopener noreferrer" className="list-group-item list-group-item-action flex-column align-items-start py-4 px-4">
-                                      
-                                            <div className="sports-autor">
-                                              <h5 className="mb-1">{item.author != null ? item.author: 'Sports Story'}</h5>
-                                            </div>
-                                        <h4 className="mt-3 mb-1"> {item.title}</h4>
-                                      </a>
-                                    ))
-                                  }
+          <section className="section bg-white">
+            <Row className="row-grid d-flex align-items-stretch mx-5">
+              <Col lg="12">
+                <Row className="row-grid">
+                  <Col lg="9" md="9" className="d-flex align-self-center">
+                    {this.state.newsLoading === true ? (
+                      <div className="loader-container d-flex align-items-center">
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                      </div>
+                    ) : this.state.search.length === 0 ? (
+                      <TopHeadlines
+                        news={this.state.news}
+                        title="Top Headlines"
+                        temp={this.state.temp}
+                        weather={this.state.weather}
+                      ></TopHeadlines>
+                    ) : (
+                      <TopHeadlines
+                        news={this.state.search}
+                        title={
+                          "Search results for '" + this.state.searchData + "'"
+                        }
+                        temp={this.state.temp}
+                        weather={this.state.weather}
+                      ></TopHeadlines>
+                    )}
+                  </Col>
+                  <Col md="3" lg="3">
+                    <Card className="bg-white shadow border-0  card-sports">
+                      <CardHeader className="bg-white">
+                        <h5 className="h3 mb-0 text-success">
+                          {" "}
+                          <i className="ni ni-trophy"></i> &nbsp;Sports{" "}
+                        </h5>
+                      </CardHeader>
+                      <CardBody className="p-0">
+                        <div className="list-group list-group-flush">
+                          {this.state.sportsLoading === true ? (
+                            <div className="d-flex align-self-center mt-4 mb-4">
+                              <div className="dot"></div>
+                              <div className="dot"></div>
+                              <div className="dot"></div>
+                            </div>
+                          ) : (
+                            this.state.sports.map(item => (
+                              <Link
+                                to={{
+                                  pathname: "/news",
+                                  data: {
+                                    news: item,
+                                    temp: this.state.temp,
+                                    weather: this.state.weather
+                                  } // your data array of objects
+                                }}
+                                className="list-group-item list-group-item-action flex-column align-items-start py-4 px-4"
+                              >
+                                <div className="sports-autor">
+                                  <h5 className="mb-1">
+                                    {item.author != null
+                                      ? item.author
+                                      : "Sports Story"}
+                                  </h5>
                                 </div>
-                              </CardBody> 
-                          </Card>
-                      </Col>
-                    </Row>
-                </Col>  
-              </Row>
+                                <h4 className="mt-3 mb-1"> {item.title}</h4>
+                              </Link>
+                            ))
+                          )}
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
           </section>
         </main>
-        <SimpleFooter/>
+        <SimpleFooter />
       </>
     );
   }
 }
 
-export default Landing;
+export default Home;

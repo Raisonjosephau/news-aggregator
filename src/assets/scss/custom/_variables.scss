@@ -14,8 +14,8 @@ $gray-300: #dee2e6 !default;
 $gray-400: #ced4da !default;
 $gray-500: #adb5bd !default;
 $gray-600: #8898aa !default; // Line footer color
-$gray-700: #525f7f !default; // Line p color
-$gray-800: #32325d !default; // Line heading color
+$gray-700: #3c3b3d !default; // Line p color
+$gray-800: #3c3b3d !default; // Line heading color
 $gray-900: #212529 !default;
 $black: #000 !default;
 $grays: () !default;
@@ -130,9 +130,9 @@ $transition-base: all .15s ease !default;
 $transition-fade: opacity .15s linear !default;
 $transition-collapse: height .35s ease !default;
 // Fonts
-$font-family-base: 'Poppins',
+$font-family-base: 'Roboto',
 sans-serif !default;
-$font-family-alt: 'Poppins',
+$font-family-alt: 'Roboto',
 sans-serif !default;
 $font-size-base: 1rem !default; // Assumes the browser default, typically `16px`
 $font-size-xl: ($font-size-base * 1.5);
@@ -177,7 +177,7 @@ $display2-weight: $font-weight-bold !default;
 $display3-weight: $font-weight-bold !default;
 $display4-weight: $font-weight-bold !default;
 $display-line-height: $headings-line-height !default;
-$paragraph-font-size: 1rem !default;
+$paragraph-font-size: 1.1rem !default;
 $paragraph-font-weight: 300 !default;
 $paragraph-line-height: 1.7 !default;
 $lead-font-size: ($paragraph-font-size * 1.25);
