@@ -20,6 +20,7 @@ class NewsDetails extends React.Component {
   }
 
   componentDidMount() {
+    window.scrollTo(0, 0);
     const { data } = this.props.location;
     console.log(data);
     if (data === undefined) {
@@ -74,7 +75,8 @@ class NewsDetails extends React.Component {
               <Row>
                 <Col lg="9" md="8" className="single-news">
                   <h2 className="font-weight-300 text-shadow-1">
-                    {this.state.news.author === null
+                    {this.state.news.author === null ||
+                    this.state.news.author === ""
                       ? "Quite Light"
                       : this.state.news.author}
                   </h2>
@@ -94,14 +96,22 @@ class NewsDetails extends React.Component {
                       <blockquote className="blockquote">
                         <p className="mb-0">{this.state.news.description}</p>
                       </blockquote>
-                      <p className="excert mb-5">{this.state.news.content}</p>
+                      <p className="excert mb-3">{this.state.news.content}</p>
+                      <a
+                        className="text-success"
+                        href={this.state.news.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Read more
+                      </a>
                     </Col>
                   </Row>
                 </Col>
-                <Col lg="3" md="4" sm="12">
+                <Col lg="3" md="4" sm="12" className="mt-5">
                   <Row>
-                    <Col lg="12" md="12" sm="12">
-                      <div className="single-news mb-20 text-shadow-0 shadow shadow--hover">
+                    <Col lg="12" md="12" sm="12" className="mt-5">
+                      <div className="single-news mt-1 text-shadow-0 shadow shadow--hover">
                         <div className="thumb">
                           <div className="position-relative">
                             <img

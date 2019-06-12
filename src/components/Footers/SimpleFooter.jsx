@@ -1,5 +1,7 @@
 /*eslint-disable*/
 import React from "react";
+import { Link } from "react-router-dom";
+
 // reactstrap components
 import { NavItem, NavLink, Nav, Container, Row, Col } from "reactstrap";
 
@@ -22,19 +24,13 @@ class SimpleFooter extends React.Component {
                   <Row className="mx-0">
                     <ul className="col footer-nav">
                       <li>
-                        <a href="#">Sitemaps</a>
+                        <Link to="/">Quite Light</Link>
                       </li>
                       <li>
                         <a href="#">Categories</a>
                       </li>
                       <li>
                         <a href="#">Archives</a>
-                      </li>
-                      <li>
-                        <a href="#">Advertise</a>
-                      </li>
-                      <li>
-                        <a href="#">Ad Choice</a>
                       </li>
                     </ul>
                     <ul className="col footer-nav">
@@ -46,12 +42,6 @@ class SimpleFooter extends React.Component {
                       </li>
                       <li>
                         <a href="#">Help Center</a>
-                      </li>
-                      <li>
-                        <a href="#">Newsletters</a>
-                      </li>
-                      <li>
-                        <a href="#">Feedback</a>
                       </li>
                     </ul>
                   </Row>
